@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Antrian Penumpang - KAI (Kereta Api Indonesia)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-train"></i>
+                </div>
+                <div class="header-text">
+                    <h1>KERETA API INDONESIA</h1>
+                    <h2>Sistem Antrian Penumpang Stasiun Utama</h2>
+                    <p>Melayani dengan Sepenuh Hati</p>
+                </div>
+            </div>
+            <div class="datetime">
+                <div id="current-date">Selasa, 4 Juni 2024</div>
+                <div id="current-time">08:30:45</div>
+                <div class="station-info">
+                    <i class="fas fa-map-marker-alt"></i> Stasiun Gambir, Jakarta
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="content-wrapper">
+                <!-- Panel Kontrol Admin -->
+                <section class="control-panel">
+                    <h3><i class="fas fa-sliders-h"></i> Panel Kontrol Antrian</h3>
+                    
+                    <div class="control-group">
+                        <div class="input-group">
+                            <label for="queue-number"><i class="fas fa-ticket-alt"></i> Nomor Antrian</label>
+                            <div class="input-with-buttons">
+                                <input type="number" id="queue-number" min="1" value="1" placeholder="Masukkan nomor antrian">
+                                <div class="number-buttons">
+                                    <button id="decrease-btn" class="number-btn"><i class="fas fa-minus"></i></button>
+                                    <button id="increase-btn" class="number-btn"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="gate"><i class="fas fa-door-open"></i> Gate Tujuan</label>
+                            <select id="gate">
+                                <option value="1">Gate 1 - Layanan Tiket Eksekutif</option>
+                                <option value="2">Gate 2 - Layanan Tiket Bisnis</option>
+                                <option value="3">Gate 3 - Layanan Tiket Ekonomi</option>
+                                <option value="4">Gate 4 - Check-in & Boarding</option>
+                                <option value="5">Gate 5 - Pengembalian Tiket</option>
+                                <option value="6">Gate 6 - Layanan Disabilitas</option>
+                                <option value="7">Gate 7 - Layanan Lansia & Ibu Hamil</option>
+                                <option value="8">Gate 8 - Informasi Perjalanan</option>
+                                <option value="9">Gate 9 - Kehilangan Barang</option>
+                                <option value="10">Gate 10 - Pengaduan Pelanggan</option>
+                                <option value="11">Gate 11 - Reservasi Grup</option>
+                                <option value="12">Gate 12 - Layanan Asuransi</option>
+                                <option value="13">Gate 13 - Antar-Jemput Barang</option>
+                                <option value="14">Gate 14 - Fasilitas Stasiun</option>
+                                <option value="15">Gate 15 - Layanan Darurat</option>
+                            </select>
+                        </div>
+                        
+                        <div class="speed-control">
+                            <label for="speed"><i class="fas fa-tachometer-alt"></i> Kecepatan Suara</label>
+                            <div class="speed-slider-container">
+                                <span class="speed-label slow">Lambat</span>
+                                <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
+                                <span class="speed-label fast">Cepat</span>
+                                <span id="speed-value">1.0x</span>
+                            </div>
+                        </div>
+                        
+                        <div class="volume-control">
+                            <label for="volume"><i class="fas fa-volume-up"></i> Volume Suara</label>
+                            <div class="volume-slider-container">
+                                <span class="volume-label"><i class="fas fa-volume-mute"></i></span>
+                                <input type="range" id="volume" min="0" max="100" value="80">
+                                <span class="volume-label"><i class="fas fa-volume-up"></i></span>
+                                <span id="volume-value">80%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button id="call-btn" class="btn call-btn">
+                                <i class="fas fa-bullhorn"></i> Panggil Antrian
+                            </button>
+                            <button id="repeat-btn" class="btn repeat-btn">
+                                <i class="fas fa-redo"></i> Ulangi Panggilan
+                            </button>
+                            <button id="reset-btn" class="btn reset-btn">
+                                <i class="fas fa-trash-alt"></i> Reset Antrian
+                            </button>
+                            <button id="test-btn" class="btn test-btn">
+                                <i class="fas fa-music"></i> Test Suara
+                            </button>
+                        </div>
+                        
+                        <div class="current-call">
+                            <h4><i class="fas fa-history"></i> Riwayat Panggilan Terakhir</h4>
+                            <div id="last-call-display">Belum ada panggilan</div>
+                            <div class="call-time" id="call-time"></div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Tampilan Antrian Utama -->
+                <section class="queue-display">
+                    <h3><i class="fas fa-tv"></i> Tampilan Antrian Stasiun</h3>
+                    
+                    <div class="display-container">
+                        <div class="current-number-display">
+                            <div class="label">SEDANG DIPANGGIL</div>
+                            <div id="current-number" class="number">-</div>
+                            <div class="gate-label">SILAHKAN MENUJU KE</div>
+                            <div id="current-gate" class="gate">GATE -</div>
+                            <div class="instruction">Segera menuju ke gate yang dituju</div>
+                        </div>
+                        
+                        <div class="next-number-display">
+                            <div class="label">AKAN DIPANGGIL</div>
+                            <div id="next-number" class="number">-</div>
+                            <div class="gate-label">GATE TUJUAN</div>
+                            <div id="next-gate" class="gate">GATE -</div>
+                            <div class="instruction">Bersiap menuju area antrian</div>
+                        </div>
+                    </div>
+                    
+                    <div class="train-announcement">
+                        <div class="announcement-icon">
+                            <i class="fas fa-train"></i>
+                        </div>
+                        <div class="announcement-text">
+                            "Selamat datang di Stasiun Gambir. Harap perhatikan nomor antrian Anda dan jaga barang bawaan."
+                        </div>
+                    </div>
+                    
+                    <div class="queue-list">
+                        <h4><i class="fas fa-list-ol"></i> Daftar Antrian Hari Ini</h4>
+                        <div id="queue-list-container">
+                            <p class="empty-queue">Belum ada antrian</p>
+                        </div>
+                        <div class="queue-stats">
+                            <div class="stat">
+                                <span class="stat-label">Total Antrian:</span>
+                                <span id="total-queue" class="stat-value">0</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Tersisa:</span>
+                                <span id="remaining-queue" class="stat-value">0</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Terlayani:</span>
+                                <span id="served-queue" class="stat-value">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Panel Gate -->
+                <section class="gate-panel">
+                    <h3><i class="fas fa-door-closed"></i> Status Gate (1-15)</h3>
+                    
+                    <div class="gate-grid">
+                        <!-- Gate akan ditambahkan oleh JavaScript -->
+                    </div>
+                    
+                    <div class="train-info">
+                        <h4><i class="fas fa-info-circle"></i> Informasi Kereta</h4>
+                        <div class="info-items">
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <span>Jam Operasional: 05:00 - 22:00 WIB</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-phone-alt"></i>
+                                <span>Call Center: 121</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-headset"></i>
+                                <span>Layanan Pelanggan: 24 Jam</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>Harap datang 1 jam sebelum keberangkatan</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-train"></i>
+                    <span>KERETA API INDONESIA</span>
+                </div>
+                <div class="footer-text">
+                    <p>© 2024 PT Kereta Api Indonesia (Persero). Seluruh hak cipta dilindungi undang-undang.</p>
+                    <p>Stasiun Gambir, Jakarta Pusat | Telp: (021) 121 | Email: contact@kai.id | Website: www.kai.id</p>
+                </div>
+                <div class="footer-social">
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-facebook"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Audio untuk suara kereta -->
+    <audio id="train-horn" src="https://assets.mixkit.co/sfx/preview/mixkit-train-horn-1000.mp3" preload="auto"></audio>
+    <audio id="bell-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-bell-notification-933.mp3" preload="auto"></audio>
+    
+    <script src="script.js"></script>
+</body>
+</html>
